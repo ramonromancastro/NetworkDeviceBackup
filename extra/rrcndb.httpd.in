@@ -1,0 +1,28 @@
+Alias /rrcndb "@DESTDIR@/share"
+
+<Directory "@DESTDIR@/share">
+  # Descomentar esta linea para forzar la navegación segura
+  # SSLRequireSSL
+  Options None
+  AllowOverride None
+  
+  <IfVersion >= 2.3>
+    <RequireAll>
+      Require all granted
+      AuthName "rrcNetworkDeviceBackup Access Control"
+      AuthType Basic
+      AuthUserFile @DESTDIR@/etc/htpasswd
+      Require valid-user
+    </RequireAll>
+  </IfVersion>
+  
+  <IfVersion < 2.3>
+    Order allow,deny
+    Allow from all
+    AuthName "rrcNetworkDeviceBackup Access Control"
+    AuthType Basic
+    AuthUserFile @DESTDIR@/etc/htpasswd
+    Require valid-user
+  </IfVersion>
+
+</Directory>

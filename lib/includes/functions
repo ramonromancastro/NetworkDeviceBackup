@@ -1,0 +1,16 @@
+#
+# Shell script
+#
+
+find_login (){
+	ip=$1
+	login=$2
+	value=""
+	while read -r line; do
+		value=`grep "[[:space:]]*$login[[:space:]]*$ip[[:space:]]*" "$password_file" | awk '{ print $4 }'`
+		if [ -z $value ]; then
+			value=`grep "[[:space:]]*$login[[:space:]]*\*[[:space:]]*" "$password_file" | awk '{ print $4 }'`
+		fi
+	done < "$password_file"
+	echo "${value}"
+}

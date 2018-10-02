@@ -1,0 +1,290 @@
+#!/bin/bash
+#
+# rrcndb.sh	Copias de seguridad de la configuración de dispositivos de red.
+# Copyright (C) 2018  Ramón Román Castro <ramonromancastro@gmail.com>
+
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+
+# You should have received a copy of the GNU General Public License along
+# with this program; if not, write to the Free Software Foundation, Inc.,
+# 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+
+# config-files:
+#	etc/router.db		Listado de dispositivos respaldados
+#	etc/rrcndb.conf		Configuración general
+#	etc/.cloginrc		Claves de acceso a los dispositivos respaldados
+#	etc/config			Configuración de los plugins "shell"
+#	etc/config.exp		Configuración de los plugins "expect"
+
+# output:
+#	/path/to/backup/DISPOSITIVO.conf
+
+# changelog:
+#	0.4.1	Versión inicial
+#	0.4.2	Añadido un parámetro para ejecutar el script sólo para un dispositivo en concreto
+#	0.4.3	Sustituido up por enabled, down por disabled y skipped para los no procesados
+#	0.4.4	Cambios estéticos en el código fuente y actualización de la licencia
+
+VERSION="0.4.4"
+
+#
+# FUNCTIONS
+#
+
+mailReport (){
+	if [ "${rrcndbMailEnable}" == "yes" ]; then
+	(
+		echo "To: ${rrcndbMailTo}"
+		if [ ${errorCount} -eq 0 ]; then
+			echo "Subject: ${rrcndbMailSubject} OK"
+		else
+			echo "Subject: ${rrcndbMailSubject} ERROR"
+		fi
+		echo ""
+		cat ${rrcndbLastLogFile}
+		) | sendmail -t -f ${rrcndbMailFrom}
+	fi
+}
+
+verb (){
+	timestamp=$(date +"%Y-%m-%d %H:%M:%S")
+	tab=""
+	if [ ! -z $2 ]; then
+		num=$(($2*2))
+		tab=$(printf "%-${num}s" " ")
+	fi
+	message="[${timestamp}] ${tab}$1"
+	if [ "$rrcndbLogEnable" == "yes" ]; then
+		if [ ! -f ${rrcndbLogFile} ]; then
+			touch ${rrcndbLogFile}
+			chmod a+r ${rrcndbLogFile}
+		fi
+		echo "${message}" >> ${rrcndbLogFile}
+
+		if [ ! -f ${rrcndbLastLogFile} ]; then
+			touch ${rrcndbLastLogFile}
+			chmod a+r ${rrcndbLastLogFile}
+		fi
+		echo "${message}" >> ${rrcndbLastLogFile}
+	fi
+	if [ "$rrcndbVerboseEnable" == "yes" ]; then
+		echo "${message}"
+	fi
+}
+
+custom_exit (){
+	if [ ! -z "$2" ]; then
+		verb "$2"
+	fi
+	verb "##############################"
+	verb "END EXECUTION (Exit Code $1)"
+	verb "##############################"
+
+	if [ $1 -ne 0 ]; then
+		((errorCount++))
+		mailReport
+	fi
+
+	rm -f ${rrcndbTmpDir}/*.${rrcndbRawExt} > /dev/null 2>&1
+	rm -f ${rrcndbLastLogFile} > /dev/null 2>&1
+
+	rm -f ${rrcndbPIDFile} > /dev/null 2>&1
+
+	exit $1
+}
+
+saveStatus (){
+	if [ ! -f ${rrcndbStatusFile} ]; then
+		touch ${rrcndbStatusFile}
+		chmod a+r ${rrcndbStatusFile}
+	fi
+	echo "$1:$2" >> ${rrcndbStatusFile}
+}
+
+#
+# GLOBAL VARIABLES
+#
+
+errorCount=0
+disabledCount=0
+okCount=0
+
+####
+#### MAIN CODE
+####
+
+#
+# LOAD CONFIGURATION FILE
+#
+
+rrcndbCfgFile=@DESTDIR@/etc/rrcndb.conf
+verb "Loading ${rrcndbCfgFile}"
+if [ -f ${rrcndbCfgFile} ]; then
+	. ${rrcndbCfgFile}
+else
+	custom_exit 1 "File ${rrcndbCfgFile} not found."
+fi
+
+echo $$ > ${rrcndbPIDFile}
+chmod a+r ${rrcndbPIDFile}
+
+#
+# REMOVE OLD FILES
+#
+
+rm -f ${rrcndbTmpDir}/*.${rrcndbRawExt} > /dev/null 2>&1
+rm -f ${rrcndbLastLogFile} > /dev/null 2>&1
+rm -f ${rrcndbStatusFile} > /dev/null 2>&1
+
+verb "##############################"
+verb "BEGIN EXECUTION"
+verb "##############################"
+
+#
+# CHECK PREREQUISITES
+#
+
+verb "Checking prerequisites"
+if [ ! -x "$(command -v cat)" ]; then custom_exit 1 "cat not found."; fi
+if [ ! -x "$(command -v expect)" ]; then custom_exit 1 "expect not found."; fi
+if [ ! -x "$(command -v perl)" ]; then custom_exit 1 "perl not found."; fi
+if [ ! -x "$(command -v sed)" ]; then custom_exit 1 "sed not found."; fi
+if [ ! -x "$(command -v wget)" ]; then custom_exit 1 "wget not found."; fi
+if [ "${rrcndbMailEnable}" == "yes" ] && [ ! -x "$(command -v sendmail)" ]; then custom_exit 1 "sendmail not found."; fi
+
+#
+# LOAD ROUTER FILE
+#
+
+verb "Loading ${rrcndbRouterFile}"
+if [ -f ${rrcndbRouterFile} ]; then
+	rrcndbRouters=($(cat ${rrcndbRouterFile}))
+else
+	custom_exit 1 "File ${rrcndbRouterFile} not found."
+fi
+
+#
+# READ PARAMETERS
+#
+
+onlyDevice=
+if [ ! -z "$1" ]; then onlyDevice=$1; fi
+
+verb "Loading ${rrcndbRouterFile}"
+if [ -f ${rrcndbRouterFile} ]; then
+	rrcndbRouters=($(cat ${rrcndbRouterFile}))
+else
+	custom_exit 1 "File ${rrcndbRouterFile} not found."
+fi
+
+#
+# ITERATE ROUTERS
+#
+
+verb "Iterate items from ${rrcndbRouterFile}"
+for rrcndbRouter in "${rrcndbRouters[@]}"
+do
+	verb "Parsing item ${rrcndbRouter}" 1
+	if [[ "${rrcndbRouter}" =~ ^\s*\# ]]; then
+		continue
+	fi
+	IFS=":" read -ra items <<< "$rrcndbRouter"
+	#items=(${rrcndbRouter//:/ })
+	scriptParameters=
+	if [ ${#items[@]} -ge 4 ]; then
+		if [ ! -z $onlyDevice ] && [ "$onlyDevice" != "${items[0]}" ]; then
+			((okCount++))
+			verb "Skip item ${items[0]}: Filtered by parameter" 2
+			saveStatus ${items[0]} "skipped"
+			continue
+		fi
+		if [ ! "${items[2]}" == "enabled" ]; then
+			((disabledCount++))
+			verb "Skip item ${items[0]}: Disabled by configuration" 2
+			saveStatus ${items[0]} "disabled"
+			continue
+		fi
+
+		if [ ${#items[@]} -gt 4 ] && [ ! -z ${items[4]} ] ; then
+			scriptParameters="-t ${items[4]}"
+		fi
+
+		if [ ! -f "${rrcndbLibDir}/${items[1]}" ]; then
+			((errorCount++))
+			verb "Skip ${items[0]}: Script file not found (${rrcndbLibDir}/${items[1]})" 2
+			saveStatus ${items[0]} "error"
+			continue
+		fi
+
+		verb "Executing CLI: ${rrcndbLibDir}/${items[1]}" 2
+		${rrcndbLibDir}/${items[1]} ${scriptParameters} ${items[0]} > "${rrcndbTmpDir}/${items[0]}.${rrcndbRawExt}" 2> /dev/null
+		extErrorCode=$?
+		if [ $extErrorCode -ne 0 ]; then
+			((errorCount++))
+			verb "Skip ${items[0]}: CLI execution returns error code ($extErrorCode)" 2
+			saveStatus ${items[0]} "error"
+			continue
+		fi
+
+		if [ -f "${rrcndbTmpDir}/${items[0]}.${rrcndbRawExt}" ] && [ -s "${rrcndbTmpDir}/${items[0]}.${rrcndbRawExt}" ]; then
+			verb "Executing CLI: ${rrcndbLibFilterLinesFile}" 2
+			#read -n1 -r -p "Press any key to continue..." key
+			perl "${rrcndbLibFilterLinesFile}" < "${rrcndbTmpDir}/${items[0]}.${rrcndbRawExt}" > "${rrcndbBackupDir}/${items[0]}.${rrcndbConfExt}" 2> /dev/null
+			extErrorCode=$?
+			if [ $extErrorCode -ne 0 ]; then
+				((errorCount++))
+				verb "Skip ${items[0]}: CLI filter execution returns error code ($extErrorCode)" 2
+				rm -f "${rrcndbBackupDir}/${items[0]}.${rrcndbConfExt}" > /dev/null 2>&1
+				saveStatus ${items[0]} "error"
+				continue
+			fi
+
+			verb "Trimming first and last line from file" 2
+			sed -i -e '$d' "${rrcndbBackupDir}/${items[0]}.${rrcndbConfExt}" > /dev/null 2>&1
+			extErrorCode=$?
+			if [ $extErrorCode -ne 0 ]; then
+				((errorCount++))
+				verb "Skip ${items[0]}: Trimming file returns error code ($extErrorCode)" 2
+				rm -f "${rrcndbBackupDir}/${items[0]}.${rrcndbConfExt}" > /dev/null 2>&1
+				saveStatus ${items[0]} "error"
+				continue
+			fi
+		fi
+
+		chmod a+r "${rrcndbBackupDir}/${items[0]}.${rrcndbConfExt}"
+		((okCount++))
+		verb "Configuration file OK" 2
+		saveStatus ${items[0]} "ok"
+	else
+		((errorCount++))
+		verb "Skip item (${rrcndbRouter}): Invalid format" 2
+		saveStatus ${items[0]} "error"
+	fi
+done
+
+verb "--------------------------------------"
+verb "Summary"
+verb "--------------------------------------"
+verb " Ok       : ${okCount}"
+verb " Error    : ${errorCount}"
+verb " Disabled : ${disabledCount}"
+verb "--------------------------------------"
+
+if [ "${rrcndbMailEnable}" == "yes" ]; then
+	verb "Sending log by email"
+	mailReport
+	extErrorCode=$?
+	if [ $extErrorCode -ne 0 ]; then
+		custom_exit 1 "Sending log by email returns error code ($extErrorCode)" 1
+	fi
+fi
+
+custom_exit 0

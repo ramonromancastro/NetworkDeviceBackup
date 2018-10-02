@@ -1,0 +1,86 @@
+#!/usr/bin/expect --
+
+# ###################################################################
+# DO NOT MODIFY!! ALWAYS INCLUDE THIS CODE INSIDE SHELL PLUGINS
+# ###################################################################
+
+source [file dirname [info script]]/../etc/config.exp
+source [file dirname [info script]]/includes/functions.exp
+
+# ###################################################################
+# ADD YOUR CODE HERE
+# ###################################################################
+
+# Local functions
+
+# Read command line arguments
+# Read command line arguments
+for {set i 0} {$i < $argc} {incr i} {
+    set arg [lindex $argv $i]
+    switch  -glob -- $arg {
+		-d* {
+			exp_internal 1
+		} -t* {
+			if {! [ regexp .\[tT\](.+) $arg ignore timeout]} {
+			incr i
+				set timeout [ lindex $argv $i ]
+			}
+		} -* {
+			exit 1
+		} default {
+			break
+		}
+    }
+}
+if { $i == $argc } {
+    exit 1
+}
+set router [lindex $argv $i]
+
+# Read username & password from file
+source_password_file $password_file
+set user [read_from_file user $router]
+set password [read_from_file password $router]
+
+# Global variables
+set usage "Usage: $argv0 router"
+set prompt "^.+\\:$user> $"
+
+# Launch SSH connection
+spawn ssh $user@$router
+expect {
+	"Are you sure you want to continue connecting (yes/no)? " {
+		send "yes\r"
+		exp_continue }
+	"*assword: " {
+		send "$password\r"
+	}
+	timeout {
+		close $spawn_id
+		exit 1
+	}
+	eof {
+		close $spawn_id
+		exit 1
+	}
+}
+expect -re $prompt
+send "configupload -all -p ftp $ftpserver,$ftpuser,$router$ftpfileext,$ftppass\r"
+expect {
+	"configUpload complete: All config parameters are uploaded" {
+	}
+	-re "$prompt" {
+		close $spawn_id
+		exit 1
+	}
+	timeout {
+		close $spawn_id
+		exit 1
+	}
+	eof {
+		close $spawn_id
+		exit 1
+	}
+}
+send "exit\r"
+close $spawn_id

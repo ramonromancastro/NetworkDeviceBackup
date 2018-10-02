@@ -1,0 +1,10 @@
+# List of devices
+# Format:
+# IP_ADDRESS|FQDN:PLUGIN_NAME:enabled|disabled:DESCRIPTION(:TIMEOUT)
+#
+# Examples:
+#
+# 192.168.0.1:fortigate.exp:enabled:Firewall
+# 192.168.0.10:hp.exp:enabled:Primary switch
+# 192.168.0.12:cisco.exp:enabled:Secondary switch
+# 192.168.0.13:cisco.exp:enabled:Floor switch:60

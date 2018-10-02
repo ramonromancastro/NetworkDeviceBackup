@@ -1,0 +1,25 @@
+##
+## CUSTOM CONFIGURATION
+##
+
+set timeout 10
+
+set ftpserver FTP_SERVER
+set ftpuser USERNAME
+set ftppass PASSWORD
+
+set tftpserver TFTP_SERVER
+
+##
+## DEBUG OPTIONS
+##
+
+log_user 0
+
+##
+## DO NOT MODIFY THIS!
+##
+
+set ftpfileext .conf
+set tftpfileext .conf
+set password_file @DESTDIR@/etc/.cloginrc

@@ -1,0 +1,75 @@
+#!/usr/bin/expect --
+
+# ###################################################################
+# DO NOT MODIFY!! ALWAYS INCLUDE THIS CODE INSIDE SHELL PLUGINS
+# ###################################################################
+
+source [file dirname [info script]]/../etc/config.exp
+source [file dirname [info script]]/includes/functions.exp
+
+# ###################################################################
+# ADD YOUR CODE HERE
+# ###################################################################
+
+# Local functions
+
+# Global variables
+set usage "Usage: $argv0 router"
+set prompt "^.*(<|\\\[).+(>|])$"
+
+# Read command line arguments
+set router [lindex $argv 0]
+
+# Read username & password from file
+source_password_file $password_file
+set user [read_from_file user $router]
+set password [read_from_file password $router]
+
+log_user 1
+set timeout 90
+
+# Launch SSH connection
+spawn telnet $router
+expect "Username:"
+send "$user\r"
+expect "Password:"
+send "$password\r"
+expect -re $prompt
+send "_cmdline-mode on\r"
+expect "*N]"
+send "Y\r"
+expect "*password:"
+send "512900\r"
+expect -re $prompt
+send "system-view\r"
+expect -re $prompt
+send "ssh server enable\r"
+expect -re $prompt
+send "user-interface vty 0 15\r"
+expect -re $prompt
+send "authentication-mode scheme\r"
+expect -re $prompt
+send "protocol inbound all\r"
+expect -re $prompt
+send "quit\r"
+expect -re $prompt
+send "local-user $user\r"
+expect -re $prompt
+send "service-type ssh\r"
+expect -re $prompt
+send "quit\r"
+expect -re $prompt
+send "ssh user $user service-type stelnet authentication-type password\r"
+expect -re $prompt
+send "save\r"
+expect "Are you sure?"
+send "Y\r"
+expect "(To leave the existing filename unchanged, press the enter key):"
+send "\r"
+expect ", overwrite?"
+send "Y\r"
+expect -re $prompt
+send "quit\r"
+expect -re $prompt
+send "quit\r"
+close $spawn_id

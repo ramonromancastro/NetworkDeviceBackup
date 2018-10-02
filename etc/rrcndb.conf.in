@@ -1,0 +1,44 @@
+##
+## CUSTOM CONFIGURATION
+##
+
+# Installation path
+# rrcndbBaseDir=/usr/local/rrcndb/
+rrcndbBaseDir=@DESTDIR@
+
+# Backup path
+# rrcndbBackupDir=/usr/local/rrcndb/var/dump
+rrcndbBackupDir=@DESTDIR@/var/dump
+
+# Display log messages on stdout
+# rrcndbVerboseEnable="yes|no"
+rrcndbVerboseEnable="yes"
+
+# Save log message on {rrcndbLogFile} file
+# rrcndbLogEnable="yes|no"
+rrcndbLogEnable="yes"
+
+# Enable mail result
+# rrcndbMailEnable="yes|no"
+rrcndbMailEnable="yes"
+rrcndbMailFrom="alertas@epgpc.epgpc"
+rrcndbMailTo="alertas.tic.aaiicc@juntadeandalucia.es"
+rrcndbMailSubject="rrcndb [$(date +"%Y-%m-%d")]"
+
+##
+## DO NOT MODIFY THIS!
+##
+
+rrcndbCfgDir=@DESTDIR@/etc
+rrcndbLibDir=@DESTDIR@/lib
+rrcndbTmpDir=@DESTDIR@/tmp
+rrcndbRouterFile=@DESTDIR@/etc/router.db
+rrcndbLibFilterLinesFile=@DESTDIR@/lib/filter_lines.pl
+rrcndbLastLogFile=@DESTDIR@/logs/rrcndb.last.log
+rrcndbStatusFile=@DESTDIR@/logs/rrcndb.status
+rrcndbPIDFile=@DESTDIR@/logs/rrcndb.pid
+
+rrcndbLogFile=/var/log/rrcndb.log
+
+rrcndbRawExt=raw.conf
+rrcndbConfExt=conf

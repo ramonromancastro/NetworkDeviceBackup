@@ -1,0 +1,65 @@
+#!/usr/bin/expect --
+
+# ###################################################################
+# DO NOT MODIFY!! ALWAYS INCLUDE THIS CODE INSIDE SHELL PLUGINS
+# ###################################################################
+
+source [file dirname [info script]]/../etc/config.exp
+source [file dirname [info script]]/includes/functions.exp
+
+# ###################################################################
+# ADD YOUR CODE HERE
+# ###################################################################
+
+# Local functions
+
+# Global variables
+set usage "Usage: $argv0 router"
+set prompt "^.+: $"
+
+# Read command line arguments
+set router [lindex $argv 0]
+
+# Read username & password from file
+source_password_file $password_file
+set user [read_from_file user $router]
+set password [read_from_file password $router]
+
+log_user 0
+
+# Launch TELNET connection
+spawn telnet $router
+expect "Login: "
+send "$user\r"
+expect "Password: "
+send "$password\r"
+expect -re $prompt
+send "system\r"
+expect -re $prompt
+send "backupConfig\r"
+expect -re $prompt
+send "save\r"
+expect -re $prompt
+send "$tftpserver\r"
+expect -re $prompt
+send "$router$tftpfileext\r"
+expect -re $prompt
+send "rrcndb\r"
+expect {
+	"Error: Save Failed:" {
+		close $spawn_id
+		exit 1
+	}
+	"Save of system configuration successful." {
+	}
+	default {
+		exp_continue
+	}
+}
+expect -re $prompt
+send "quit\r"
+expect -re $prompt
+send "quit\r"
+expect -re $prompt
+send "logout\r"
+close $spawn_id

@@ -1,0 +1,7 @@
+/var/log/rrcndb.log {
+    missingok
+    notifempty
+	weekly
+	rotate 4
+	nodateext
+}
