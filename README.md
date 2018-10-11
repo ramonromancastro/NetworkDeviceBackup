@@ -7,6 +7,11 @@ Basado en RANCID (http://www.shrubbery.net/rancid/)
 
 Esta aplicación está destinada a realizar copias de seguridad de dispositivos de red. Además dispone de una interfaz Web con las cual podemos ver en todo momento el resultado de la última copia de seguridad y descargar las copias de seguridad en cualquer lugar.
 
+Licencia
+--------
+
+NetworkDeviceBackup está publicado bajo la licencia GPLv2.
+
 Tecnología utilizada
 --------------------
 
