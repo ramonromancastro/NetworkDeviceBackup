@@ -146,16 +146,15 @@ if (file_exists($config['routerPID'])){ ?>
 			else
 				$lastBackup="";	
 ?>
-				
 				<tr class="<?php echo ($status=='error')?'w3-pale-red':''; ?>">
-					<td><i class="fas fa-cube fa-fw" aria-hidden="true"></i> <?php echo $items[0]; ?></td>
-					<td class="text-center"><i class="fa <?php echo status2FontAwesome($enable); ?> fa-fw" aria-hidden="true"></i><span class="sr-only"><?php echo status2Text($enable); ?></span></td>
-					<td class="text-center"><i class="fa <?php echo status2FontAwesome($status); ?> fa-fw" aria-hidden="true"></i><span class="sr-only"><?php echo status2Text($status); ?></span></td>
+					<td><i class="fas fa-cube fa-fw" aria-hidden="true"></i> <?php echo $items[0]; ?><br/><span class="w3-tiny w3-text-gray"><?php echo $items[3]; ?></span></td>
+					<td class="text-center"><i class="fa fa-2x <?php echo status2FontAwesome($enable); ?> fa-fw" aria-hidden="true"></i><span class="sr-only"><?php echo status2Text($enable); ?></span></td>
+					<td class="text-center"><i class="fa fa-2x <?php echo status2FontAwesome($status); ?> fa-fw" aria-hidden="true"></i><span class="sr-only"><?php echo status2Text($status); ?></span></td>
 					<td><?php echo $lastBackup; ?></td>
 					<td>
 					<?php if ($lastBackup != '') { ?>
 						<a href="download.php?router=<?php echo urlencode($items[0]); ?>" title="Descargar">
-							<i class="fas fa-cloud-download-alt fa-fw" aria-hidden="true"></i><span class="sr-only">Descargar</span>
+							<i class="fas fa-cloud-download-alt fa-2x fa-fw" aria-hidden="true"></i><span class="sr-only">Descargar</span>
 						</a>
 					<?php } ?>
 					</td>
@@ -227,7 +226,7 @@ if (file_exists($config['routerPID'])){ ?>
 				<strong>Versión</strong>
 				<ul class="w3-ul my-ul">
 					<li>rrc2software @ rrcNetworkDeviceBackup GUI</li>
-					<li>v1.0.1</li>
+					<li>v1.0.2</li>
 				</ul>
 				<strong>Más información</strong>
 				<ul class="w3-ul my-ul">
