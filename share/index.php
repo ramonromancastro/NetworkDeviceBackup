@@ -219,7 +219,7 @@ if (file_exists($config['routerPID'])){ ?>
 			<div class="w3-third">
 				<strong>Licencias</strong>
 				<ul class="w3-ul my-ul">
-					<li><a rel="license" href="http://creativecommons.org/licenses/by-nc-nd/3.0/deed.es_ES"><img alt="Licencia de Creative Commons" style="border-width:0" src="http://i.creativecommons.org/l/by-nc-nd/3.0/80x15.png" /></a><br /><span xmlns:dct="http://purl.org/dc/terms/" property="dct:title">rrc2software &copy; rrcNetworkDeviceBackup</span> by <a xmlns:cc="http://creativecommons.org/ns#" href="http://www.rrc2software.com" property="cc:attributionName" rel="cc:attributionURL">Ramón Román Castro</a> is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc-nd/3.0/deed.es_ES">Creative Commons Reconocimiento-NoComercial-SinObraDerivada 3.0 Unported License</a>.</li>
+					<li>NetworkDeviceBackup está publicado bajo la licencia <a rel="license" href="https://www.gnu.org/licenses/old-licenses/gpl-2.0.html" title="GNU General Public License, version 2">GPLv2</a>.</li>
 				</ul>
 			</div>
 			<div class="w3-third">
