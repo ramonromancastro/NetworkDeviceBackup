@@ -3,8 +3,6 @@
 rrc2software @ NetworkDeviceBackup
 ==================================
 
-Basado en RANCID (http://www.shrubbery.net/rancid/)
-
 Esta aplicación está destinada a realizar copias de seguridad de dispositivos de red. Además dispone de una interfaz Web con las cual podemos ver en todo momento el resultado de la última copia de seguridad y descargar las copias de seguridad en cualquer lugar.
 
 Licencia
