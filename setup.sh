@@ -145,7 +145,7 @@ do_action(){
 }
 
 prerequisites(){
-	log_action "Install application prerequisites" yum -y install coreutils expect httpd perl php sed sendmail wget
+	log_action "Install application prerequisites" yum -y install coreutils expect httpd perl php sed sendmail wget net-snmp-utils
 }
 
 install_parse(){
