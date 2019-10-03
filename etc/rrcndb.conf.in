@@ -25,6 +25,10 @@ rrcndbMailFrom="alertas@epgpc.epgpc"
 rrcndbMailTo="alertas.tic.aaiicc@juntadeandalucia.es"
 rrcndbMailSubject="rrcndb [$(date +"%Y-%m-%d")]"
 
+# SNMP parameters
+rrcndbSNMPVersion=2c
+rrcndbSNMPCommunity=public
+
 ##
 ## DO NOT MODIFY THIS!
 ##

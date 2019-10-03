@@ -32,8 +32,10 @@
 #	0.4.2	Añadido un parámetro para ejecutar el script sólo para un dispositivo en concreto
 #	0.4.3	Sustituido up por enabled, down por disabled y skipped para los no procesados
 #	0.4.4	Cambios estéticos en el código fuente y actualización de la licencia
+#	0.5		Añadida la detección de modelo del dispositivo
 
-VERSION="0.4.4"
+VERSION="0.5"
+MIB_SYSDESCR=".iso.org.dod.internet.mgmt.mib-2.system.sysDescr.0"
 
 #
 # FUNCTIONS
@@ -106,7 +108,7 @@ saveStatus (){
 		touch ${rrcndbStatusFile}
 		chmod a+r ${rrcndbStatusFile}
 	fi
-	echo "$1:$2" >> ${rrcndbStatusFile}
+	echo "$1:$2:$3" >> ${rrcndbStatusFile}
 }
 
 #
@@ -158,6 +160,7 @@ if [ ! -x "$(command -v expect)" ]; then custom_exit 1 "expect not found."; fi
 if [ ! -x "$(command -v perl)" ]; then custom_exit 1 "perl not found."; fi
 if [ ! -x "$(command -v sed)" ]; then custom_exit 1 "sed not found."; fi
 if [ ! -x "$(command -v wget)" ]; then custom_exit 1 "wget not found."; fi
+if [ ! -x "$(command -v snmpget)" ]; then custom_exit 1 "snmpget not found."; fi
 if [ "${rrcndbMailEnable}" == "yes" ] && [ ! -x "$(command -v sendmail)" ]; then custom_exit 1 "sendmail not found."; fi
 
 #
@@ -199,17 +202,18 @@ do
 	IFS=":" read -ra items <<< "$rrcndbRouter"
 	#items=(${rrcndbRouter//:/ })
 	scriptParameters=
+	deviceModel=
 	if [ ${#items[@]} -ge 4 ]; then
 		if [ ! -z $onlyDevice ] && [ "$onlyDevice" != "${items[0]}" ]; then
 			((okCount++))
 			verb "Skip item ${items[0]}: Filtered by parameter" 2
-			saveStatus ${items[0]} "skipped"
+			saveStatus ${items[0]} "skipped" "$deviceModel"
 			continue
 		fi
 		if [ ! "${items[2]}" == "enabled" ]; then
 			((disabledCount++))
 			verb "Skip item ${items[0]}: Disabled by configuration" 2
-			saveStatus ${items[0]} "disabled"
+			saveStatus ${items[0]} "disabled" "$deviceModel"
 			continue
 		fi
 
@@ -220,8 +224,18 @@ do
 		if [ ! -f "${rrcndbLibDir}/${items[1]}" ]; then
 			((errorCount++))
 			verb "Skip ${items[0]}: Script file not found (${rrcndbLibDir}/${items[1]})" 2
-			saveStatus ${items[0]} "error"
+			saveStatus ${items[0]} "error" "$deviceModel"
 			continue
+		fi
+
+		verb "Detecting device model" 2
+		deviceModel=$(snmpget -Oqv -v ${rrcndbSNMPVersion} -c ${rrcndbSNMPCommunity} ${items[0]} ${MIB_SYSDESCR})
+		extErrorCode=$?
+		if [ $extErrorCode -ne 0 ]; then
+			((errorCount++))
+			verb "Warning ${items[0]}: Detect device model returns error code ($extErrorCode)" 2
+			#saveStatus ${items[0]} "error" "$deviceModel"
+			#continue
 		fi
 
 		verb "Executing CLI: ${rrcndbLibDir}/${items[1]}" 2
@@ -230,7 +244,7 @@ do
 		if [ $extErrorCode -ne 0 ]; then
 			((errorCount++))
 			verb "Skip ${items[0]}: CLI execution returns error code ($extErrorCode)" 2
-			saveStatus ${items[0]} "error"
+			saveStatus ${items[0]} "error" "$deviceModel"
 			continue
 		fi
 
@@ -243,7 +257,7 @@ do
 				((errorCount++))
 				verb "Skip ${items[0]}: CLI filter execution returns error code ($extErrorCode)" 2
 				rm -f "${rrcndbBackupDir}/${items[0]}.${rrcndbConfExt}" > /dev/null 2>&1
-				saveStatus ${items[0]} "error"
+				saveStatus ${items[0]} "error" "$deviceModel"
 				continue
 			fi
 
@@ -254,7 +268,7 @@ do
 				((errorCount++))
 				verb "Skip ${items[0]}: Trimming file returns error code ($extErrorCode)" 2
 				rm -f "${rrcndbBackupDir}/${items[0]}.${rrcndbConfExt}" > /dev/null 2>&1
-				saveStatus ${items[0]} "error"
+				saveStatus ${items[0]} "error" "$deviceModel"
 				continue
 			fi
 		fi
@@ -262,11 +276,11 @@ do
 		chmod a+r "${rrcndbBackupDir}/${items[0]}.${rrcndbConfExt}"
 		((okCount++))
 		verb "Configuration file OK" 2
-		saveStatus ${items[0]} "ok"
+		saveStatus ${items[0]} "ok" "$deviceModel"
 	else
 		((errorCount++))
 		verb "Skip item (${rrcndbRouter}): Invalid format" 2
-		saveStatus ${items[0]} "error"
+		saveStatus ${items[0]} "error" "$deviceModel"
 	fi
 done
 

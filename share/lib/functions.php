@@ -18,7 +18,8 @@ function loadFiles(){
 		$routerStatusTmp=file($config['routerStatus'], FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
 		foreach ($routerStatusTmp as $router){
 			$tmp = explode(":",$router);
-			$routerStatus[$tmp[0]]=$tmp[1];
+			$routerStatus[$tmp[0]]['status']=$tmp[1];
+			$routerStatus[$tmp[0]]['model']=$tmp[2];
 		}
 		asort($routerStatus);
 	}
@@ -96,5 +97,4 @@ function url_AbsoluteUrl($url){
 	
 	return $scheme . '://' . $host . (isset($port)?":$port":'') . $_SERVER['REQUEST_URI'] . $url;
 }
-
 ?>

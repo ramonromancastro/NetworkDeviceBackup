@@ -22,7 +22,7 @@
 			$enabled=$items[2];
 			if ($enabled != "disabled"){
 				if (array_key_exists($device,$routerStatus))
-					$summary[$routerStatus[$device]]++;
+					$summary[$routerStatus[$device]['status']]++;
 				else
 					$summary["nd"]++;
 			}
@@ -135,7 +135,7 @@ if (file_exists($config['routerPID'])){ ?>
 			$items=explode(":",$router);
 			$enable=$items[2];
 			if (array_key_exists($items[0],$routerStatus)){
-				$status=$routerStatus[$items[0]];
+				$status=$routerStatus[$items[0]]['status'];
 			}
 			else
 				$status="nd";
@@ -146,8 +146,13 @@ if (file_exists($config['routerPID'])){ ?>
 			else
 				$lastBackup="";	
 ?>
+				
 				<tr class="<?php echo ($status=='error')?'w3-pale-red':''; ?>">
-					<td><i class="fas fa-cube fa-fw" aria-hidden="true"></i> <?php echo $items[0]; ?><br/><span class="w3-tiny w3-text-gray"><?php echo $items[3]; ?></span></td>
+					<td>
+						<i class="fas fa-cube fa-fw" aria-hidden="true"></i> <?php echo $items[0]; ?>
+						<?php if (!empty($items[3])){?><span class="w3-tiny w3-text-gray"> (<?php echo $items[3]; ?>)</span><?php } ?>
+						<?php if (!empty($routerStatus[$items[0]]['model'])){?><br/><span class="w3-tiny w3-text-gray"><?php echo $routerStatus[$items[0]]['model']; ?></span><?php } ?>
+					</td>
 					<td class="text-center"><i class="fa fa-2x <?php echo status2FontAwesome($enable); ?> fa-fw" aria-hidden="true"></i><span class="sr-only"><?php echo status2Text($enable); ?></span></td>
 					<td class="text-center"><i class="fa fa-2x <?php echo status2FontAwesome($status); ?> fa-fw" aria-hidden="true"></i><span class="sr-only"><?php echo status2Text($status); ?></span></td>
 					<td><?php echo $lastBackup; ?></td>
@@ -226,7 +231,7 @@ if (file_exists($config['routerPID'])){ ?>
 				<strong>Versión</strong>
 				<ul class="w3-ul my-ul">
 					<li>rrc2software @ rrcNetworkDeviceBackup GUI</li>
-					<li>v1.0.2</li>
+					<li>v1.0.3</li>
 				</ul>
 				<strong>Más información</strong>
 				<ul class="w3-ul my-ul">
