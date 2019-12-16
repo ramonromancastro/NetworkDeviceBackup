@@ -39,3 +39,5 @@
   - NetApp FAS 2050
 - procurve.exp
   - HP ProCurve Switch 2510G-48 (J9280A)
+- unifi.controller.sh
+  - UniFi Controller (tested with 5.12.x)
