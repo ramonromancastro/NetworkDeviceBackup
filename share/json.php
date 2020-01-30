@@ -25,12 +25,13 @@ switch ($query){
 		$json['data']['Disabled'] = 0;
 		$json['data']['N/A'] = 0;
 		$json['data']['Error'] = 0;
+
 		foreach ($routerConfig as $router) {
 			$pos = strpos($router, "#");
 			if (($pos === false) || ($pos)){
 				$items=explode(":",$router);
 				if (array_key_exists($items[0],$routerStatus)){
-					$json['data'][status2Text($routerStatus[$items[0]])]++;
+					$json['data'][status2Text($routerStatus[$items[0]]['status'])]++;
 				}
 				else
 					$json['data']['N/A']++;
