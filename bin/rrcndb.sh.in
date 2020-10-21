@@ -34,8 +34,9 @@
 #	0.4.4	Cambios estéticos en el código fuente y actualización de la licencia
 #	0.5		Añadida la detección de modelo del dispositivo
 #	0.5.1	Eliminados los caracteres \r\n\t del modelo del dispositivo
+#	0.5.2	Pequeñas correcciones
 
-VERSION="0.5.1"
+VERSION="0.5.2"
 MIB_SYSDESCR=".iso.org.dod.internet.mgmt.mib-2.system.sysDescr.0"
 
 #
@@ -231,8 +232,8 @@ do
 
 		verb "Detecting device model" 2
 		deviceModel=$(snmpget -Oqv -v ${rrcndbSNMPVersion} -c ${rrcndbSNMPCommunity} ${items[0]} ${MIB_SYSDESCR})
-		deviceModel=${deviceModel//[\t\r\n]/ }}
 		extErrorCode=$?
+		deviceModel=${deviceModel//[\t\r\n]/ }}
 		if [ $extErrorCode -ne 0 ]; then
 			#((errorCount++))
 			verb "Warning ${items[0]}: Detect device model returns error code ($extErrorCode)" 2
