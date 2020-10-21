@@ -41,3 +41,6 @@
   - HP ProCurve Switch 2510G-48 (J9280A)
 - unifi.controller.sh
   - UniFi Controller (tested with 5.12.x)
+- unifi.controller.api.sh
+  - UniFi Controller (tested with 5.14.x)
+  - unifi_sh_api (shell library) required. Available at [Software Releases | Ubiquiti Community](https://community.ui.com/releases/).
