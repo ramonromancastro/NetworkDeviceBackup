@@ -1,6 +1,8 @@
-**************************************************************
+
 Install FTP server (if you doesnt have on)
-**************************************************************
+------------------------------------------
+
+```
 [root@server]# yum install vsftpd ftp
 [root@server]# nano /etc/vsftpd/vsftpd.conf
 ...
@@ -12,10 +14,12 @@ chroot_local_user=YES
 ...
 [root@server]# service vsftpd start
 [root@server]# chkconfig vsftpd on
+```
 
-**************************************************************
 NetApp FAS (netapp.sh)
-**************************************************************
+----------------------
+
+```
 ### ON NetAPP:
 
 NetApp> qtree security <volume> unix
@@ -34,28 +38,32 @@ NetApp> exportfs
 ...
 netappVolumeName=<volume>
 ...
+```
 
-
-**************************************
 Enable SSH on Procurve
-**************************************
-# http://community.spiceworks.com/how_to/show/2403-configure-ssh-on-hp-procurve-switches
+----------------------
+
+[community.spiceworks.com](http://community.spiceworks.com/how_to/show/2403-configure-ssh-on-hp-procurve-switches)
+
+```
 device# config
 device(config)# crypto key generate ssh
 device(config)# ip ssh
 device(config)# write memory
 device(config)# end
+```
 
-
-**************************************
 Enable SSH on D-Link
-**************************************
+--------------------
+
+```
 device:user#enable ssh
+```
 
-
-**************************************
 Enable SSH on 3Com
-**************************************
+------------------
+
+```
 <switch>system-view
 [switch]rsa local-key-pair create
 1024
@@ -69,19 +77,22 @@ Enable SSH on 3Com
 [switch]quit
 <switch>ssh user <USERNAME> authentication-type password
 <switch>save
+```
 
 
-**************************************
 Useful NFS commands
-**************************************
+-------------------
+
+```
 showmount -e <netapp>
 showmount <netapp>
 exportsfs -h
 exportfs -c <host> <path>
+```
 
-**************************************
-How to enable Telnet and SSH on HPE 1920s OfficeConnect 
-**************************************
+
+Enable SSH on HPE 1920s OfficeConnect 
+-------------------------------------------------------
 
 [community.hpe.com](https://community.hpe.com/t5/Web-and-Unmanaged/How-to-Enable-Telnet-and-SSH-on-HPE-1920s-OfficeConnect/m-p/7008940/highlight/true#M3852)
 
@@ -114,11 +125,7 @@ How to enable Telnet and SSH on HPE 1920s OfficeConnect
 (HPE)# quit
 ```
 
-
-@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-@    WARNING: REMOTE HOST IDENTIFICATION HAS CHANGED!     @
-@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+WARNING: REMOTE HOST IDENTIFICATION HAS CHANGED!
+------------------------------------------------
 
 Add correct host key in /root/.ssh/known_hosts to get rid of this message.
-
-
