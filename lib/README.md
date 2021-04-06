@@ -1,4 +1,5 @@
-# Plugins availables
+Plugins
+-------
 
 - 3com.2800.sh
   - 3Com Baseline 2800-SFP Plus
@@ -7,7 +8,7 @@
   - 3Com Switch 4200G 24-Port (3CR17661-91)
   - 3Com Switch 4200G 48-Port (3CR17662-91)
 - 3com.superstack.exp
-  - 3Com SuperStack 3 Swicth 4200 Series (3C17300)
+  - 3Com SuperStack 3 Switch 4200 Series (3C17300)
 - allnet.sh
   - ALLNET 6700
 - cisco.exp
@@ -20,9 +21,9 @@
 - eternusdx.exp
   - ETERNUS DX80 S2
 - fortigate.exp
-  - FortiGate 200D (FGT-200D)
   - FortiGate 60B (FGT-60B)
   - FortiGate 60C (FGT-60C)
+  - FortiGate 200D (FGT-200D)
 - fortimanager.exp
   - FortiManager VM64 (FMG-VM64)
 - fujitsu.py.cb.eth
@@ -33,14 +34,16 @@
   - HP V1910-24G-PoE (365W) Switch (JE007A)
 - hp.exp
   - HP 2530-24G Switch (J9776A)
+- hp.officeconnect.ssh.sh
+  - HPE OfficeConnect 1920S Switch Series
+- hp.officeconnect.web.sh
+  - HPE OfficeConnect 1920S Switch Series
 - hpp2000.exp
   - HP StorageWorks P2000 G3 iSCSI
 - netapp.sh
   - NetApp FAS 2050
 - procurve.exp
   - HP ProCurve Switch 2510G-48 (J9280A)
-- unifi.controller.sh
-  - UniFi Controller (tested with 5.12.x)
 - unifi.controller.api.sh
-  - UniFi Controller (tested with 5.14.x)
-  - unifi_sh_api (shell library) required. Available at [Software Releases | Ubiquiti Community](https://community.ui.com/releases/).
+  - UniFi Network Controller 5.x
+  - UniFi Network Controller 6.x
