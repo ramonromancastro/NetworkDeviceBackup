@@ -79,6 +79,41 @@ showmount <netapp>
 exportsfs -h
 exportfs -c <host> <path>
 
+**************************************
+How to enable Telnet and SSH on HPE 1920s OfficeConnect 
+**************************************
+
+[community.hpe.com](https://community.hpe.com/t5/Web-and-Unmanaged/How-to-Enable-Telnet-and-SSH-on-HPE-1920s-OfficeConnect/m-p/7008940/highlight/true#M3852)
+
+1. Descargar la versión de PD.02.06 de https://h10145.www1.hpe.com/downloads/DownloadSoftware.aspx?SoftwareReleaseUId=24306&ProductNumber=JL385A&lang=&cc=&prodSeriesId=&SaidNumber=.
+2. Actualizar el firmware del switch mediante la interfaz Web.
+3. Descargar startup-config desde la interfaz Web del switch.
+4. Editar startup-config e insertar la cadena ```insert ip telnet server enable``` antes de ```configure```.
+5. Subir startup-config al switch desde la interfaz Web.
+6. Reiniciar el switch.
+7. Conectarse mediante telnet al switch y ejecutar los siguientes comandos:
+
+```
+(HPE)> enable
+(HPE)# configure
+(HPE)# crypto key generate rsa
+(HPE)# crypto key generate dsa
+(HPE)# exit
+(HPE)# ip ssh server enable
+(HPE)# ip ssh protocol 2
+(HPE)# write memory confirm
+(HPE)# quit
+```
+
+8. Si se desea deshabilitar telnet, conectarse mediante ssh al switch y ejecutar los comandos:
+
+```
+(HPE)> enable
+(HPE)# no ip telnet server enable
+(HPE)# write memory confirm
+(HPE)# quit
+```
+
 
 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 @    WARNING: REMOTE HOST IDENTIFICATION HAS CHANGED!     @
