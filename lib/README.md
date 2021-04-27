@@ -44,6 +44,8 @@ Plugins
   - NetApp FAS 2050
 - procurve.exp
   - HP ProCurve Switch 2510G-48 (J9280A)
+- quts.hero.web.sh
+  - QNAP QuTS hero 4.5.x
 - unifi.controller.sh
   - UniFi Network Controller 5.x
 - unifi.controller.api.sh
