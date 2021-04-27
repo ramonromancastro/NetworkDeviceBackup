@@ -3,7 +3,7 @@
 ## Based on h3clogin by Copyright (c) 1997-2009 by Terrapin Communications, Inc. All rights reserved.
 
 # Include external files
-source [file dirname [info script]]/etc/config.exp
+source [file dirname [info script]]/../etc/config.exp
 source [file dirname [info script]]/includes/functions.exp
 
 # Local functions
