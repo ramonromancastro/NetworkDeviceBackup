@@ -4,7 +4,7 @@
 # DO NOT MODIFY!! ALWAYS INCLUDE THIS CODE INSIDE SHELL PLUGINS
 ####################################################################
 
-. $(dirname `readlink -f -- $0`)/etc/config
+. $(dirname `readlink -f -- $0`)/../etc/config
 . $(dirname `readlink -f -- $0`)/includes/functions
 . $(dirname `readlink -f -- $0`)/../etc/rrcndb.conf
 
