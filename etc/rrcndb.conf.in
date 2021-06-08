@@ -21,8 +21,8 @@ rrcndbLogEnable="yes"
 # Enable mail result
 # rrcndbMailEnable="yes|no"
 rrcndbMailEnable="yes"
-rrcndbMailFrom="alertas@epgpc.epgpc"
-rrcndbMailTo="alertas.tic.aaiicc@juntadeandalucia.es"
+rrcndbMailFrom="rrcndb@example.com"
+rrcndbMailTo="alertas@example.com"
 rrcndbMailSubject="rrcndb [$(date +"%Y-%m-%d")]"
 
 # SNMP parameters
