@@ -233,7 +233,7 @@ do
 		verb "Detecting device model" 2
 		deviceModel=$(snmpget -Oqv -v ${rrcndbSNMPVersion} -c ${rrcndbSNMPCommunity} ${items[0]} ${MIB_SYSDESCR} 2> /dev/null)
 		extErrorCode=$?
-		deviceModel=${deviceModel//[\t\r\n]/ }}
+		deviceModel=${deviceModel//[\t\r\n]/ }
 		if [ $extErrorCode -ne 0 ]; then
 			#((errorCount++))
 			verb "Warning ${items[0]}: Detect device model returns error code ($extErrorCode)" 2
