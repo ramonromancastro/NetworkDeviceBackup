@@ -44,7 +44,7 @@
 	<meta property="og:title" content="rrc2software @ rrcNetworkDeviceBackup" />
 	<meta property="og:type" content="website" />
 	<meta property="og:image" content="<?php echo url_AbsoluteUrl("images/header.jpeg"); ?>" />
-	<meta property="og:url" content="<?php echo url_AbsoluteUrl(); ?>" />
+	<meta property="og:url" content="<?php echo url_AbsoluteUrl(""); ?>" />
 	<meta property="og:description" content="Copias de seguridad de dispositivos de red." />
 	<meta property="og:locale" content="es_ES" />
 	<meta property="og:site_name" content="rrc2software @ rrcNetworkDeviceBackup" />
@@ -82,7 +82,7 @@
 				<h1 class="w3-text-white">rrc2software's</h1>
 				<h1 class="w3-jumbo w3-text-white w3-hide-small"><b>Network Device Backup</b></h1>
 				<h6>
-					<a href="#informe" class="w3-button w3-white w3-padding-large w3-large w3-opacity w3-hover-opacity-off">Informe de estado<?php if (file_exists($config['routerPID'])) echo "<br/><span class='w3-small w3-text-gray'>Ejecución en curso...<span>"; fi ?></a>
+					<a href="#informe" class="w3-button w3-white w3-padding-large w3-large w3-opacity w3-hover-opacity-off">Informe de estado<?php if (file_exists($config['routerPID'])) echo "<br/><span class='w3-small w3-text-gray'>Ejecución en curso...<span>"; ?></a>
 					
 				</h6>
 			</div>
