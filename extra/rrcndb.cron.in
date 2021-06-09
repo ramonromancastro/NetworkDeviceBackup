@@ -1,1 +1,2 @@
-0 0 * * 0 root @DESTDIR@/bin/rrcndb.sh
+15 0 * * 0 root @DESTDIR@/bin/rrcndb.sh
+0  0 * * 0 root @DESTDIR@/extra/rrcndb.delete.old.sh
