@@ -1,12 +1,11 @@
 #!/bin/bash
 
 rrcndbCfgFile=@DESTDIR@/etc/rrcndb.conf
-verb "Loading ${rrcndbCfgFile}"
 if [ -f ${rrcndbCfgFile} ]; then
         . ${rrcndbCfgFile}
 else
         echo "File ${rrcndbCfgFile} not found."
-		exit 1
+	exit 1
 fi
 
 # Delete old backups
