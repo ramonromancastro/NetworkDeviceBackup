@@ -189,6 +189,7 @@ do_install(){
 	find ${DESTDIR} -type d -exec chmod 755 {} \;
 	find ${DESTDIR} -type f -exec chmod 644 {} \;
 	find ${DESTDIR}/bin -type f \( -iname "*.sh" -o -iname "*.exp" \) -exec chmod 755 {} \;
+	find ${DESTDIR}/extra -type f \( -iname "*.sh" -o -iname "*.exp" \) -exec chmod 755 {} \;
 	find ${DESTDIR}/lib -type f \( -iname "*.sh" -o -iname "*.exp" \) -exec chmod 755 {} \;
 	find ${DESTDIR}/etc -type f -exec chmod 644 {} \;
 	chmod 640 ${DESTDIR}/etc/.cloginrc
