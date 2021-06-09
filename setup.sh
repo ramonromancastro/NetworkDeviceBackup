@@ -176,6 +176,7 @@ do_install(){
 	sed "s,@DESTDIR@,${DESTDIR},g" ./etc/config.in > ${DESTDIR}/etc/config
 	sed "s,@DESTDIR@,${DESTDIR},g" ./etc/config.exp.in > ${DESTDIR}/etc/config.exp
 	sed "s,@DESTDIR@,${DESTDIR},g" ./extra/rrcndb.cron.in > ${DESTDIR}/extra/rrcndb.cron
+	sed "s,@DESTDIR@,${DESTDIR},g" ./extra/rrcndb.delete.old.sh.in > ${DESTDIR}/extra/rrcndb.delete.old.sh
 	sed "s,@DESTDIR@,${DESTDIR},g" ./extra/rrcndb.httpd.in > ${DESTDIR}/extra/rrcndb.httpd
 	sed "s,@DESTDIR@,${DESTDIR},g" ./extra/rrcndb.logrotate.in > ${DESTDIR}/extra/rrcndb.logrotate
 	sed "s,@DESTDIR@,${DESTDIR},g" ./share/config.template.php > ${DESTDIR}/share/config.php
