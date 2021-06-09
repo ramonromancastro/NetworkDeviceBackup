@@ -29,6 +29,11 @@ rrcndbMailSubject="rrcndb [$(date +"%Y-%m-%d")]"
 rrcndbSNMPVersion=2c
 rrcndbSNMPCommunity=public
 
+# Delete old backups
+# rrcndbDeleteOldEnabled="yes|no"
+rrcndbDeleteOldEnabled="yes"
+rrcndbDeleteOldDays=45
+
 ##
 ## DO NOT MODIFY THIS!
 ##
