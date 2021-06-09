@@ -11,5 +11,5 @@ fi
 # Delete old backups
 
 if [ ${rrcndbDeleteOldEnabled} == "yes" ]; then
-	find $rrcndbBackupDir -type f -iname "*.${rrcndbConfExt}" -mtime ${rrcndbDeleteOldDays} -exec rm -rf {} \;
+	find $rrcndbBackupDir -type f -iname "*.${rrcndbConfExt}" -mtime +${rrcndbDeleteOldDays} -exec rm -rf {} \;
 fi
