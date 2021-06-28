@@ -36,8 +36,9 @@
 #	0.5.1	Eliminados los caracteres \r\n\t del modelo del dispositivo
 #	0.5.2	Pequeñas correcciones
 #	0.5.3	Pequeñas correcciones
+#	0.5.4	Pequeñas correcciones
 
-VERSION="0.5.3"
+VERSION="0.5.4"
 MIB_SYSDESCR=".iso.org.dod.internet.mgmt.mib-2.system.sysDescr.0"
 
 #
@@ -183,13 +184,6 @@ fi
 
 onlyDevice=
 if [ ! -z "$1" ]; then onlyDevice=$1; fi
-
-verb "Loading ${rrcndbRouterFile}"
-if [ -f ${rrcndbRouterFile} ]; then
-	rrcndbRouters=($(cat ${rrcndbRouterFile}))
-else
-	custom_exit 1 "File ${rrcndbRouterFile} not found."
-fi
 
 #
 # ITERATE ROUTERS
