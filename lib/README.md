@@ -11,6 +11,8 @@ Plugins
   - 3Com SuperStack 3 Switch 4200 Series (3C17300)
 - allnet.sh
   - ALLNET 6700
+- at8000.exp
+  - Allied Telesis AT-8000GS
 - cisco.exp
   - Cisco Catalyst 2960-S (WS-C2960S-24PS-L)
 - cisco.mds.exp
