@@ -20,6 +20,8 @@ Plugins
 - dgs.exp
   - DGS-3120-24PC
   - DGS-3120-24SC
+- dgs.3130.exp
+  - DGS-3130-30S
 - eternusdx.exp
   - ETERNUS DX80 S2
 - fortigate.exp
@@ -34,6 +36,8 @@ Plugins
   - PY CB FC Switch 8Gb 18/8 14 (A3C40106562)
 - hh3c.exp
   - HP V1910-24G-PoE (365W) Switch (JE007A)
+- hp.2920.exp
+  - HP 2920 24G (J9726A)
 - hp.exp
   - HP 2530-24G Switch (J9776A)
 - hp.officeconnect.ssh.sh
