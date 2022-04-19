@@ -27,7 +27,7 @@ Instrucciones de instalación
 ```
 cd /path/to/source
 sh setup.sh -a prerequisites
-sh setup.sh -a install -p /user/local/rrcndb
+sh setup.sh -a install -p /usr/local/rrcndb
 systemctl restart httpd
 ```
 
