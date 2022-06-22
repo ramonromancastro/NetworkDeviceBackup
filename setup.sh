@@ -3,7 +3,7 @@
 # CONSTANTES
 
 script_name="setup.sh"
-version=1.2.1
+version=1.2.2
 
 RES_COL=60
 MOVE_TO_COL="echo -en \\033[${RES_COL}G"
@@ -176,7 +176,7 @@ do_install(){
 	sed "s,@DESTDIR@,${DESTDIR},g" ./etc/config.in > ${DESTDIR}/etc/config
 	sed "s,@DESTDIR@,${DESTDIR},g" ./etc/config.exp.in > ${DESTDIR}/etc/config.exp
 	sed "s,@DESTDIR@,${DESTDIR},g" ./extra/rrcndb.cron.in > ${DESTDIR}/extra/rrcndb.cron
-	sed "s,@DESTDIR@,${DESTDIR},g" ./extra/rrcndb.delete.old.sh.in > ${DESTDIR}/extra/rrcndb.delete.old.sh
+																									   
 	sed "s,@DESTDIR@,${DESTDIR},g" ./extra/rrcndb.httpd.in > ${DESTDIR}/extra/rrcndb.httpd
 	sed "s,@DESTDIR@,${DESTDIR},g" ./extra/rrcndb.logrotate.in > ${DESTDIR}/extra/rrcndb.logrotate
 	sed "s,@DESTDIR@,${DESTDIR},g" ./share/config.template.php > ${DESTDIR}/share/config.php
@@ -189,7 +189,7 @@ do_install(){
 	find ${DESTDIR} -type d -exec chmod 755 {} \;
 	find ${DESTDIR} -type f -exec chmod 644 {} \;
 	find ${DESTDIR}/bin -type f \( -iname "*.sh" -o -iname "*.exp" \) -exec chmod 755 {} \;
-	find ${DESTDIR}/extra -type f \( -iname "*.sh" -o -iname "*.exp" \) -exec chmod 755 {} \;
+																						  
 	find ${DESTDIR}/lib -type f \( -iname "*.sh" -o -iname "*.exp" \) -exec chmod 755 {} \;
 	find ${DESTDIR}/etc -type f -exec chmod 644 {} \;
 	chmod 640 ${DESTDIR}/etc/.cloginrc
