@@ -47,7 +47,7 @@ set user [read_from_file user $router]
 set password [read_from_file password $router]
 
 # Launch SSH connection
-spawn ssh $user@$router
+spawn ssh -c 3des-cbc $user@$router
 expect {
 	-re "Are you sure you want to continue connecting \(yes\/no\)\?" {
 		send "yes\r"
