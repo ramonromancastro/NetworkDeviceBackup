@@ -55,7 +55,7 @@ expect {
 	eof { close $spawn_id; exit 1 }
 }
 expect -re $prompt
-send "execute backup all-settings ftp $ftpserver $router$ftpfileext $ftpuser $ftppass\r"
+send "execute backup all-settings ftp $ftpserver $router$ftpfileext $ftpuser $ftppass $ftpbackuppass\r"
 expect {
 	"*Backup all settings...*" {
 		if {[regexp -nocase "Failed" $expect_out(buffer)]} {
