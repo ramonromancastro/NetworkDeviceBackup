@@ -75,7 +75,7 @@ function status2FontAwesome($status){
 	}
 }
 
-function url_AbsoluteUrl($url){
+function url_AbsoluteUrl($url=''){
 	# Scheme
 	$scheme = ((isset($_SERVER['HTTPS'])) && ($_SERVER['HTTPS']=='on'))?'https':'http';
 	if (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https') $scheme = 'https';
