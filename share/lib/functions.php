@@ -91,10 +91,7 @@ function url_AbsoluteUrl($url=''){
 	if (isset($_SERVER['HTTP_X_FORWARDED_PORT'])) $port = $_SERVER['HTTP_X_FORWARDED_PORT'];
 	if (isset($_SERVER['FORWARDED']) && preg_match('/host=([^;: ]*):?([^; ]*)/',$_SERVER['FORWARDED'],$matches)) $port = $matches[2];
 	$port = ((($scheme == 'http') && ($port != 80)) || (($scheme == 'https') && ($port != 443)))?$port:null;
-	
-	# Context
-	$context = RRC_PATH;
-	
+
 	return $scheme . '://' . $host . (isset($port)?":$port":'') . $_SERVER['REQUEST_URI'] . $url;
 }
 ?>
