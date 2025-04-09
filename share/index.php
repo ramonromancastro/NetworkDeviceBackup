@@ -44,7 +44,7 @@
 	<meta property="og:title" content="rrc2software @ rrcNetworkDeviceBackup" />
 	<meta property="og:type" content="website" />
 	<meta property="og:image" content="<?php echo url_AbsoluteUrl("images/header.jpeg"); ?>" />
-	<meta property="og:url" content="<?php echo url_AbsoluteUrl(""); ?>" />
+	<meta property="og:url" content="<?php echo url_AbsoluteUrl(); ?>" />
 	<meta property="og:description" content="Copias de seguridad de dispositivos de red." />
 	<meta property="og:locale" content="es_ES" />
 	<meta property="og:site_name" content="rrc2software @ rrcNetworkDeviceBackup" />
